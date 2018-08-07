@@ -10,13 +10,13 @@ const passport = require("passport");
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 
-// Load user model
+// Load User model
 const User = require("../../models/User");
 
 // @route   GET api/users/test
-// @desc    Tests user route
+// @desc    Tests users route
 // @access  Public
-router.get("/test", (req, res) => res.json({ msg: "Users works!" }));
+router.get("/test", (req, res) => res.json({ msg: "Users Works" }));
 
 // @route   GET api/users/register
 // @desc    Register user
@@ -35,10 +35,11 @@ router.post("/register", (req, res) => {
       return res.status(400).json(errors);
     } else {
       const avatar = gravatar.url(req.body.email, {
-        s: 200, // Size
+        s: "200", // Size
         r: "pg", // Rating
         d: "mm" // Default
       });
+
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
@@ -61,26 +62,32 @@ router.post("/register", (req, res) => {
 });
 
 // @route   GET api/users/login
-// @desc    Login User / Returning JWT
+// @desc    Login User / Returning JWT Token
 // @access  Public
 router.post("/login", (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
 
+  // Check Validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
-  // Find User
+  // Find user by email
   User.findOne({ email }).then(user => {
+    // Check for user
     if (!user) {
       errors.email = "User not found";
       return res.status(404).json(errors);
     }
 
-    // Check password
+    // Check Password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         // User Matched
-        const payload = { id: user.id, name: user.name, avatar: user.avatar }; // Create JWT payload
+        const payload = { id: user.id, name: user.name, avatar: user.avatar }; // Create JWT Payload
 
         // Sign Token
         jwt.sign(
