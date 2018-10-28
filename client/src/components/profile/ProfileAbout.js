@@ -23,9 +23,7 @@ class ProfileAbout extends Component {
             <h3 className="text-center text-info">{firstName}'s Bio</h3>
             <p className="lead">
               {isEmpty(profile.bio) ? (
-                <span>
-                  {firstName} {lastName}
-                </span>
+                <span>{firstName}</span>
               ) : (
                 <span>{profile.bio}</span>
               )}
