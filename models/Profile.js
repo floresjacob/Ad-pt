@@ -29,6 +29,25 @@ const ProfileSchema = new Schema({
     type: [String],
     required: true
   },
+  interests: [
+    {
+      field: {
+        type: String,
+        required: true
+      },
+      influence: {
+        type: [String],
+        required: true
+      },
+      example: {
+        type: [String],
+        required: true
+      }
+    }
+  ],
+  profitability: {
+    type: [String]
+  },
   bio: {
     type: String
   },
@@ -112,6 +131,18 @@ const ProfileSchema = new Schema({
     instagram: {
       type: String
     }
+  },
+  //What's your why? Why do you do what you do? Purpose, cause, or belief that inspires you
+  why: {
+    type: String
+  },
+  //What do you do?
+  what: {
+    type: String
+  },
+  //How do you do what you do?
+  how: {
+    type: String
   },
   date: {
     type: Date,
