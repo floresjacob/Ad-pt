@@ -4,8 +4,9 @@ const Schema = mongoose.Schema;
 const ProjectSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: "users"
+    ref: "user"
   },
+  //Name of Project
   name: {
     type: String,
     required: true
@@ -15,6 +16,7 @@ const ProjectSchema = new Schema({
     type: String,
     required: true
   },
+  //Is this a group project?
   group: {
     type: Boolean,
     default: false
@@ -22,7 +24,78 @@ const ProjectSchema = new Schema({
   description: {
     type: String,
     required: true
-  }
+  },
+  goal: [
+    {
+      title: {
+        type: String,
+        required: true
+      },
+      description: {
+        type: String,
+        required: true
+      },
+      //Type: Action Item, Spike Research, Parking Lot
+      type: {
+        type: String,
+        required: true
+      },
+      complete: {
+        type: Boolean,
+        default: false
+      }
+    }
+  ],
+  //Customer: A Profile of the intended audience/user/customer of the project
+  customer: [
+    {
+      name: {
+        type: String,
+        required: true
+      },
+      bio: {
+        type: String,
+        required: true
+      },
+      age: {
+        type: Number,
+        required: true
+      },
+      income: {
+        type: String
+      },
+      pains: {
+        type: [String],
+        required: true
+      },
+      gains: {
+        type: [String],
+        required: true
+      },
+      jobs: {
+        type: [String],
+        required: true
+      },
+      thoughts: {
+        type: [String]
+      },
+      feelings: {
+        type: [String]
+      },
+      sights: {
+        type: [String]
+      },
+      sounds: {
+        type: [String]
+      },
+      words: {
+        type: [String]
+      },
+      actions: {
+        type: [String]
+      }
+    }
+  ]
 });
 
 module.exports = Project = mongoose.model("projects", ProjectSchema);
