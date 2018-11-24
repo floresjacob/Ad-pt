@@ -25,7 +25,7 @@ const ProjectSchema = new Schema({
     type: String,
     required: true
   },
-  goal: [
+  goals: [
     {
       title: {
         type: String,
@@ -46,8 +46,8 @@ const ProjectSchema = new Schema({
       }
     }
   ],
-  //Customer: A Profile of the intended audience/user/customer of the project
-  customer: [
+  //Customer: A Profile of the intended audience/users/customers of the project
+  customers: [
     {
       name: {
         type: String,
