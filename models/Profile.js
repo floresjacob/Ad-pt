@@ -25,10 +25,12 @@ const ProfileSchema = new Schema({
     type: String,
     required: true
   },
+  //What the user feels they are good at
   skills: {
     type: [String],
     required: true
   },
+  //Passion or hobbies of user
   interests: [
     {
       field: {
@@ -45,9 +47,23 @@ const ProfileSchema = new Schema({
       }
     }
   ],
-  profitability: {
-    type: [String]
-  },
+  //How the user makes money or how they see others make money
+  profitability: [
+    {
+      role: {
+        type: String,
+        required: true
+      },
+      responsibilities: {
+        type: [String],
+        required: false
+      },
+      income: {
+        type: String,
+        required: true
+      }
+    }
+  ],
   bio: {
     type: String
   },

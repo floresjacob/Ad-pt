@@ -1,4 +1,4 @@
-//TODO: make project api route
+//TODO: DELETE for Goal and Customer; GET for Customer
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -26,6 +26,17 @@ router.get("/", (req, res) => {
     .then(goals => res.json(goals))
     .catch(err =>
       res.status(404).json({ noprojectsfound: "No projects found" })
+    );
+});
+
+// @route   GET api/projects/:id
+// @desc    Get project by id
+// @access  Public
+router.get("/:id", (req, res) => {
+  Project.findById(req.params.id)
+    .then(project => res.json(project))
+    .catch(err =>
+      res.status(404).json({ noprojectfound: "No project found with that ID" })
     );
 });
 
@@ -82,6 +93,18 @@ router.delete(
   }
 );
 
+// @route   GET api/projects/goals
+// @desc    Get goals
+// @access  Public
+router.get("/:id/goals", (req, res) => {
+  Project.findById(req.params.id)
+    .sort({ date: -1 })
+    .then(project => res.json(project.goals))
+    .catch(err =>
+      res.status(404).json({ noprojectsfound: "No projects found" })
+    );
+});
+
 // @route   POST api/projects/goals/:id
 // @desc    Add goal to project
 // @access  Private
@@ -106,7 +129,7 @@ router.post(
         };
 
         // Add to goals array
-        project.goal.unshift(newGoal);
+        project.goals.unshift(newGoal);
 
         // Save
         project.save().then(project => res.json(project));

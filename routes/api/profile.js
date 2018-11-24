@@ -12,6 +12,8 @@ const User = require("../../models/User");
 const validateProfileInput = require("../../validation/profile");
 const validateExperienceInput = require("../../validation/experience");
 const validateEducationInput = require("../../validation/education");
+const validateInterestInput = require("../../validation/interest");
+const validateProfitabilityInput = require("../../validation/profitability");
 
 // @route   GET api/profile/test
 // @desc    Tests profile route
@@ -230,6 +232,78 @@ router.post(
   }
 );
 
+// @route   POST api/profile/interests
+// @desc    Add interests to profile
+// @access  Private
+router.post(
+  "/interests",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateInterestInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      // Return any errors with 400 status
+      return res.status(400).json(errors);
+    }
+
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const newInterest = {
+        field: req.body.field
+      };
+
+      if (typeof req.body.influence !== "undefined") {
+        newInterest.influence = req.body.influence.split(",");
+      }
+
+      if (typeof req.body.example !== "undefined") {
+        newInterest.example = req.body.example.split(",");
+      }
+
+      // Add to interests array
+      profile.interests.unshift(newInterest);
+
+      profile.save().then(profile => res.json(profile));
+    });
+  }
+);
+
+// @route   POST api/profile/profitability
+// @desc    Add profitability to profile
+// @access  Private
+router.post(
+  "/profitability",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateProfitabilityInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      // Return any errors with 400 status
+      return res.status(400).json(errors);
+    }
+
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const newProfitability = {
+        role: req.body.role,
+        income: req.body.income
+      };
+
+      //comma separated responsibilities
+      if (typeof req.body.responsibilities !== "undefined") {
+        newProfitability.responsibilities = req.body.responsibilities.split(
+          ","
+        );
+      }
+
+      // Add to profitability array
+      profile.profitability.unshift(newProfitability);
+
+      profile.save().then(profile => res.json(profile));
+    });
+  }
+);
+
 // @route   DELETE api/profile/experience/:exp_id
 // @desc    Delete experience from profile
 // @access  Private
@@ -270,6 +344,54 @@ router.delete(
 
         // Splice out of array
         profile.education.splice(removeIndex, 1);
+
+        // Save
+        profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   DELETE api/profile/interests/:int_id
+// @desc    Delete interests from profile
+// @access  Private
+router.delete(
+  "/interests/:int_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // Get remove index
+        const removeIndex = profile.interests
+          .map(item => item.id)
+          .indexOf(req.params.int_id);
+
+        // Splice out of array
+        profile.interests.splice(removeIndex, 1);
+
+        // Save
+        profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route   DELETE api/profile/profitability/:int_id
+// @desc    Delete profitability from profile
+// @access  Private
+router.delete(
+  "/profitability/:prof_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        // Get remove index
+        const removeIndex = profile.profitability
+          .map(item => item.id)
+          .indexOf(req.params.prof_id);
+
+        // Splice out of array
+        profile.profitability.splice(removeIndex, 1);
 
         // Save
         profile.save().then(profile => res.json(profile));

@@ -35,7 +35,7 @@ const ProjectSchema = new Schema({
         type: String,
         required: true
       },
-      //Type: Action Item, Spike Research, Parking Lot
+      //Type: Action, Parking Lot, Reference
       type: {
         type: String,
         required: true
