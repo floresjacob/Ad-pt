@@ -1,3 +1,4 @@
+//TODO: PROVIDE A WAY INTO PROJECTS; DETERMINE HOW TO PASS USER ID'S IN TO VIEW PROJECTS AS CHILDREN OF USERS
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -24,6 +25,7 @@ import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
 import Posts from "./components/posts/Posts";
 import Post from "./components/post/Post";
+import Projects from "./components/projects/Projects";
 import NotFound from "./components/not-found/NotFound";
 
 import "./App.css";
@@ -62,6 +64,7 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route exact path="/profiles" component={Profiles} />
               <Route exact path="/profile/:handle" component={Profile} />
+              <Route exact path="/projects" component={Projects} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
